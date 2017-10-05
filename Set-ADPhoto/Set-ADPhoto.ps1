@@ -1,10 +1,10 @@
+#Requires -Version 3.0 -Modules activedirectory
 function Set-ADPhoto {
     <#
     .SYNOPSIS
     Sets the thumbnail photo for a user.
     
     .DESCRIPTION
-    
     
     .EXAMPLE
     Set-ADPhoto -Identity 'john.doe' -FilePath 'C:\users\john.doe\newpic.jpg'
