@@ -33,7 +33,6 @@ function Get-ADPhoto {
     end {
     } 
 }
-
 function Set-ADPhoto {
     <#
     .SYNOPSIS
@@ -67,4 +66,36 @@ function Set-ADPhoto {
     }
     end {
     } 
+}
+function Get-O365Photo {
+    <#
+    .SYNOPSIS
+    Returns all existing Exchange Online users with photos as JPEG output.
+    
+    .DESCRIPTION
+    Long description
+    
+    .EXAMPLE
+    Get-O365Photo -Directory C:\users\test\desktop\Photo 
+    
+    .NOTES
+    Must connect to Exchange Online session prior to use.
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [ValidateNotNullOrEmpty]
+        [string]$Directory = "C:\temp\Photos"
+    )
+    begin {
+    }
+    process {
+        $photoUsers = get-mailbox -ResultSize Unlimited | Where-Object {$_.HasPicture -eq $True} | Select-Object -ExpandProperty UserPrincipalName
+        foreach ($photoUser in $photoUsers) {
+            $user = Get-UserPhoto $photoUser
+            $user.PictureData | Set-Content "$Directory\$($User.Identity).jpg" -Encoding byte
+        }
+    }
+    end {
+    }
 }
